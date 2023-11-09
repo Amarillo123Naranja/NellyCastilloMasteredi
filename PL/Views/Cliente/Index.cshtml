@@ -1,0 +1,198 @@
+﻿
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
+<h1 class="text-center">Emisoras</h1>
+
+<div class="my-3">
+    <a href="#" class="btn btn-success" onclick="Form()">Agregar Emisora</a>
+</div>
+
+<div class="border border-2">
+    <table id="tblEmisoras" class="table table-dark table-bordered table-hover">
+        <thead>
+            <tr>
+                <th>Id Emisora</th>
+                <th>RFC</th>
+                <th>Fecha Inicio</th>
+                <th>Capital</th>
+            </tr>
+
+        </thead>
+        <tbody class="table-light"></tbody>
+
+    </table>
+
+</div>
+
+<div class="modal fade" id="formulario">
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+            <div class="modal-header">
+            <h4 class="text-center">Formulario</h4>
+            <button type="button" id="close" class="btn btn-danger" onclick="toggleModal()">x</button>
+            </div>
+
+            <div class="modal-body">
+                <form>
+                    <label for="txtIdEmisor">Id Emisor:</label>
+                    <input type="text" class="form-control" id="txtIdEmisor" placeholder="IdEmisor"/>
+                    <label for="txtRfc">RFC</label>
+                    <input type="text" class="form-control" id="txtRfc" placeholder="RFC"/>
+                    <label for="txtFechaInicioOperacion">Fecha Inicio</label>
+                    <input type="datetime" class="form-control" id="txtFechaInicioOperacion" placeholder="Fecha"/>
+                    <label for="txtCapital">Capital</label>
+                    <input type="number" class="form-control" id="txtCapital" placeholder="Capital $"/>
+
+                </form>
+            </div>
+
+            <div class="modal-footer">
+                <button type="submit" class="btn btn-success" id="btnGuardar" onclick="Guardar()"></button>
+                <button type="button" class="btn btn-danger" id="btnCancelar" onclick="toggleModal()">Cancelar</button>
+            </div>
+
+        </div>
+
+    </div>
+</div>
+
+@section Scripts{
+
+    <script type="text/javascript">
+
+    $(document).ready(function () {
+        GetAll();
+    });
+
+    function GetAll(){
+        $.ajax({
+            type: 'GET',
+            url: 'https://localhost:7098/api/emisor/GetAll',
+            dataType: 'json',
+            success: function(result){
+                $('#tblEmisoras tbody').empty();
+
+                $.each(result.Objects, function(i, emisor){
+                    var filas = 
+                    "<tr>"
+                    + "<td class='text-center'>" + emisor.IdEmisor + "<td>"
+                    + "<td class='text-center'>" + emisor.Rfc + "<td>"
+                    + "<td class='text-center'>" + emisor.FechaInicioOperacion + "<td>"
+                    + "<td class='text-center'>" + emisor.Capital + "<td>"
+                    + "<td class='text-center'>"
+                    + "<button class='btn btn-warning' onclick='Form(" + emisor.IdEmisor + ")'>Editar</button>"
+                    + "<button class='btn btn-danger' onclick='Delete(" + emisor.IdEmisor + ")'>Eliminar</button>"
+                    + "/td>"
+                    + "/tr>"
+                    $("#tblEmisoras tbody").append(filas);
+                    
+                });
+
+            },
+            error: function(result){
+                alert("Error");
+            }
+
+
+        });
+    };
+
+    
+    function toggleModal(){
+        $("#formulario").modal('toggle');
+    }
+
+
+
+    function Form(IdEmisora) {
+       if (IdEmisora == undefined) {
+            clearTxt();
+            $("#btnGuardar").text("Guardar")
+       }
+       else 
+       {
+         GetById(IdEmisora);
+         $("#btnGuardar").text("Actualizar")
+       }
+            toggleModal();
+       }
+
+    function clearTxt(){
+        $("#txtIdEmisor").val(""),
+        $("#txtRfc").val(""),
+        $("#txtFechaInicioOperacion").val(""),
+        $("#txtCapital").val("")
+    } 
+
+    function Guardar(){
+        var emisor = {
+            IdEmisor: $("#txtIdEmisor").val()
+        }
+            if (emisor.IdEmisor == undefined) {
+                Add(); 
+                { 
+                    alert("Agregado"); 
+                }
+            }
+            else
+            {
+             alert("Error");
+            }
+
+            toggleModal();   
+    }
+
+    function Add(){
+        var emisor = {
+            IdEmisor: $("#txtIdEmisor").val(),
+            Rfc: $("#txtRfc").val(),
+            FechaInicioOperacion: $("#txtFechaInicioOperacion").val(),
+            Capital: $("txtCapital").val()
+        }
+    
+    $.ajax({
+        type:'POST',
+        url: 'https://localhost:7098/api/emisor/Add',
+        dataType: 'json',
+        data: emisor,
+        success: function (result){
+            $('#formulario').modal('show');
+            alert("Exito")
+            GetAll();
+        },
+        error: function(result){
+            alert: ("Ocurrio un error")
+        }
+
+
+       });
+
+    };
+
+
+    function GetById(IdEmisor){
+        $.ajax({
+            type: 'GET',
+            dataType: 'json',
+            url: 'https://localhost:7098/api/emisor/GetById' + IdEmisor,
+            success: function (result){
+                $('#txtIdEmisor').val(result.Object.IdEmisor),
+                $('#txtRfc').val(result.Object.Rfc),
+                $('#txtFechaInicioOperacion').val(result.Object.FechaInicioOperacion),
+                $('#txtCapital').val(result.Object.Capital)
+            },
+            error: function(result){
+                alert: ("Ocurrio un error")
+            },
+        });
+    };
+
+    </script>
+
+}

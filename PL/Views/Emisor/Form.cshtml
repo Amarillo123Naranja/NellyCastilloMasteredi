@@ -1,0 +1,46 @@
+﻿@model ML.Emisor
+@{
+    ViewData["Title"] = "Form";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1 class="text-center">Formulario</h1>
+
+@using (Html.BeginForm("Form", "Emisor", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    @Html.HiddenFor(model => model.Accion)
+
+    <div class="row">
+
+        <div class="col-md-4">
+            @Html.LabelFor(model => model.IdEmisor)
+            @Html.TextBoxFor(model => model.IdEmisor, new {@class = "form-control", @id = "IdEmisor"})
+        </div>
+
+        <div class="col-md-4">
+            @Html.LabelFor(model => model.Rfc)
+            @Html.TextBoxFor(model => model.Rfc, new {@class = "form-control"})
+        </div>
+
+        <div class="col-md-4">
+            @Html.LabelFor(model => model.FechaInicioOperacion)
+            @Html.TextBoxFor(model => model.FechaInicioOperacion, new {@class = "form-control"})
+        </div>
+
+
+    </div>
+
+    <div class="row">
+        <div class="col-md-4">
+            @Html.LabelFor(model => model.Capital)
+            @Html.TextBoxFor(model => model.Capital, new {@class = "form-control"})
+        </div>
+    </div>
+
+    <button class="btn btn-success" type="submit">Guardar</button>
+    <a class="btn btn-danger" href="@Url.Action("GetAll", "Emisor")">Regresar</a>
+
+
+}
+
+

@@ -1,0 +1,50 @@
+﻿
+@{
+    ViewData["Title"] = "GetAll";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1 class="text-center">Emisoras</h1>
+
+<div class="container">
+
+<a href="@Url.Action("Form", "Emisor")" class="btn btn-success">Agregar</a>
+
+<table class="table table-striped">
+    <thead class="table table-active">
+        <tr class="table table-danger">
+            <th>Id Emisora</th>
+            <th>Rfc</th>
+            <th>Fecha Inicio</th>
+            <th>Capital</th>
+            <th>Actualizar</th>
+            <th>Eliminar</th>
+        </tr>
+
+    </thead>
+    <tbody>
+
+        @foreach (ML.Emisor emisor in Model.Emisoras)
+        {
+            <tr>
+                <td>@emisor.IdEmisor</td>
+                <td>@emisor.Rfc</td>
+                <td>@emisor.FechaInicioOperacion</td>
+                <td>@emisor.Capital</td>
+                <td><a class="btn btn-warning" href="@Url.Action("Form", "Emisor", new {IdEmisor = emisor.IdEmisor})">Actualizar</a></td>
+                <td><a class="btn btn-info" href="@Url.Action("Delete", "Emisor", new {IdEmisor = emisor.IdEmisor})" onclick="return confirm('¿Estas Seguro?');">Eliminar</a></td>
+
+            </tr>
+        }
+
+
+
+
+
+    </tbody>
+
+
+</table>
+
+</div>
+
