@@ -15,11 +15,13 @@
 <div class="border border-2">
     <table id="tblEmisoras" class="table table-dark table-bordered table-hover">
         <thead>
-            <tr>
+            <tr class="text-center">
                 <th>Id Emisora</th>
                 <th>RFC</th>
                 <th>Fecha Inicio</th>
                 <th>Capital</th>
+                <th>Actualizar</th>
+                <th>Eliminar</th>
             </tr>
 
         </thead>
@@ -40,14 +42,14 @@
 
             <div class="modal-body">
                 <form>
-                    <label for="txtIdEmisor">Id Emisor:</label>
+                    <label for="lblIdEmisor">Id Emisor:</label>
                     <input type="text" class="form-control" id="txtIdEmisor" placeholder="IdEmisor"/>
-                    <label for="txtRfc">RFC</label>
+                    <label for="lblRfc">RFC</label>
                     <input type="text" class="form-control" id="txtRfc" placeholder="RFC"/>
-                    <label for="txtFechaInicioOperacion">Fecha Inicio</label>
+                    <label for="lblFechaInicioOperacion">Fecha Inicio</label>
                     <input type="datetime" class="form-control" id="txtFechaInicioOperacion" placeholder="Fecha"/>
-                    <label for="txtCapital">Capital</label>
-                    <input type="number" class="form-control" id="txtCapital" placeholder="Capital $"/>
+                    <label for="lblCapital">Capital</label>
+                    <input type="text" class="form-control" id="txtCapital" placeholder="Capital $"/>
 
                 </form>
             </div>
@@ -76,20 +78,20 @@
             url: 'https://localhost:7098/api/emisor/GetAll',
             dataType: 'json',
             success: function(result){
-                $('#tblEmisoras tbody').empty();
-
-                $.each(result.Objects, function(i, emisor){
+                $.each(result.objects, function(i, emisor){
                     var filas = 
                     "<tr>"
-                    + "<td class='text-center'>" + emisor.IdEmisor + "<td>"
-                    + "<td class='text-center'>" + emisor.Rfc + "<td>"
-                    + "<td class='text-center'>" + emisor.FechaInicioOperacion + "<td>"
-                    + "<td class='text-center'>" + emisor.Capital + "<td>"
-                    + "<td class='text-center'>"
-                    + "<button class='btn btn-warning' onclick='Form(" + emisor.IdEmisor + ")'>Editar</button>"
-                    + "<button class='btn btn-danger' onclick='Delete(" + emisor.IdEmisor + ")'>Eliminar</button>"
-                    + "/td>"
-                    + "/tr>"
+                    + "<td>" + emisor.idEmisor + "</td>"
+                    + "<td>" + emisor.rfc + "</td>"
+                    + "<td>" + emisor.fechaInicioOperacion + "</td>"
+                    + "<td>" + emisor.capital + "</td>"
+                    + "<td>"
+                    + "<button class='btn btn-warning' onclick='Form(" + emisor.idEmisor + ")'>Editar</button>"
+                    +"</td>"
+                    +"<td>"
+                    + "<button class='btn btn-danger' onclick='Delete(" + emisor.idEmisor + ")'>Eliminar</button>"
+                    + "</td>"
+                    + "</tr>"
                     $("#tblEmisoras tbody").append(filas);
                     
                 });
@@ -132,9 +134,9 @@
 
     function Guardar(){
         var emisor = {
-            IdEmisor: $("#txtIdEmisor").val()
+            idEmisor: $("#txtIdEmisor").val()
         }
-            if (emisor.IdEmisor == undefined) {
+            if (emisor.idEmisor != undefined) {
                 Add(); 
                 { 
                     alert("Agregado"); 
@@ -180,12 +182,12 @@
         $.ajax({
             type: 'GET',
             dataType: 'json',
-            url: 'https://localhost:7098/api/emisor/GetById' + IdEmisor,
+                url: 'https://localhost:7098/api/emisor/GetById/' + IdEmisor,
             success: function (result){
-                $('#txtIdEmisor').val(result.Object.IdEmisor),
-                $('#txtRfc').val(result.Object.Rfc),
-                $('#txtFechaInicioOperacion').val(result.Object.FechaInicioOperacion),
-                $('#txtCapital').val(result.Object.Capital)
+                $('#txtIdEmisor').val(result.object.idEmisor),
+                $('#txtRfc').val(result.object.rfc),
+                $('#txtFechaInicioOperacion').val(result.object.fechaInicioOperacion),
+                $('#txtCapital').val(result.object.capital)
             },
             error: function(result){
                 alert: ("Ocurrio un error")

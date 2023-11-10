@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Cors;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace SL.Controllers
@@ -7,7 +8,7 @@ namespace SL.Controllers
     [ApiController]
     public class EmisorController : ControllerBase
     {
-
+        [EnableCors("API")]
         [Route("Add")]
         [HttpPost]
 
@@ -25,6 +26,7 @@ namespace SL.Controllers
             }
         }
 
+        [EnableCors("API")]
         [Route("GetAll")]
         [HttpGet]
         public IActionResult GetAll()
@@ -41,6 +43,7 @@ namespace SL.Controllers
             }
         }
 
+        [EnableCors("API")]
         [Route("GetById/{IdEmisor}")]
         [HttpGet]
         public IActionResult GetById(string IdEmisor)
